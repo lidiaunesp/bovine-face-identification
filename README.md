@@ -4,30 +4,32 @@ Identificação facial de bovinos via deep learning.
 
 O projeto reconhece animais individualmente a partir de imagens da face e do focinho extraídos de vídeos, oferecendo uma alternativa não invasiva aos métodos tradicionais de identificação, como brincos e marcação a ferro.
 
-## Sobre o projeto
+# Cattle ReID API
 
-Este repositório contém o material base do projeto, com o pipeline de treino
-que combina as três regiões. Cada combinação gera um modelo `best.pt`, salvo em
-`outputs/checkpoints`.
+Pacote Python independente para identificar bovinos em video usando YOLO + ReID.
 
-## Dados
+## Uso rapido
 
-O material de vídeos não é versionado neste repositório devido ao seu tamanho.
-Para executar o treinamento, os vídeos devem ser inseridos em `data/`, divididos
-em duas pastas:
+```python
+from cattle_reid_api import identify_bovine_from_video, add_bovine_from_video
 
-- `duplicated_videos/`: animais com mais de um vídeo
-- `unique_videos/`: animais com um único vídeo
+result = identify_bovine_from_video("video.mp4")
+print(result["cow_id"], result["score"], result["status"])
 
-## Configuração
+add_bovine_from_video("NE_1234", "novo_bovino.mp4")
+```
 
-O pipeline é configurado pelo arquivo `config/config.yaml`, que define, entre
-outros parâmetros, as camadas do backbone a serem treinadas e a seed usada na
-seleção aleatória dos vídeos.
+## Artefatos incluidos
 
-## Execução
+- `models/yolo/best.pt`: detector YOLO.
+- `models/reid/best.pt`: checkpoint ReID `head+face+muzzle`.
+- `gallery/head_face_muzzle_gallery.npz`: galeria atualizavel de bovinos conhecidos.
 
-As instruções completas de execução estão descritas no readme dentro do proejto
+A funcao `add_bovine_from_video` extrai embeddings validas do video, cria um prototipo medio normalizado e adiciona/substitui esse bovino na galeria.
+
+## Observação
+
+Para um correto funcionamento, é necessário que o projeto disponha das bibliotecas definidas em `requirements.txt`. Com isso, caso ainda não os tenha, instale no ambiente de uso.
 
 
 ## Download
